@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { FleetProvider } from './context/FleetContext';
@@ -20,8 +20,30 @@ import Expenses from './pages/Expenses';
 import Analytics from './pages/Analytics';
 
 import { Toaster } from 'react-hot-toast';
+import api from './utils/api';
 
 function App() {
+    useEffect(() => {
+        const pingBackend = async () => {
+            try {
+                const lastPing = localStorage.getItem('lastPingDate');
+                const now = new Date().getTime();
+                const threeDaysInMs = 3 * 24 * 60 * 60 * 1000;
+
+                // Ping if we've never pinged before, or if 3 days have passed since the last ping
+                if (!lastPing || (now - parseInt(lastPing)) > threeDaysInMs) {
+                    await api.get('/'); // Hit the root endpoint to wake up the server
+                    localStorage.setItem('lastPingDate', now.toString());
+                    console.log('Backend wake-up ping sent successfully.');
+                }
+            } catch (error) {
+                console.error('Failed to ping backend:', error);
+            }
+        };
+
+        pingBackend();
+    }, []);
+
     return (
         <Router>
             <AuthProvider>
