@@ -45,6 +45,24 @@ const Login = () => {
                 <p className="mt-2 text-center text-sm text-gray-600">
                     Enter your credentials to access the command center
                 </p>
+                <div className="mt-4 flex flex-col items-center gap-2">
+                    <p className="text-xs text-gray-500 font-medium">Demo Accounts (Password: <span className="font-bold text-gray-800">Admin@123</span>):</p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                        {['example1@gmail.com', 'example2@gmail.com', 'example3@gmail.com', 'example4@gmail.com'].map(email => (
+                            <button
+                                key={email}
+                                type="button"
+                                onClick={() => {
+                                    setEmail(email);
+                                    setPassword('Admin@123');
+                                }}
+                                className="text-xs px-2 py-1 bg-primary-50 text-primary-700 rounded-md hover:bg-primary-100 transition-colors border border-primary-200"
+                            >
+                                {email}
+                            </button>
+                        ))}
+                    </div>
+                </div>
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
